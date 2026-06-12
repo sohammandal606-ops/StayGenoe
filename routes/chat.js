@@ -1,18 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const MistralClient = require("@mistralai/mistralai").default;
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const client = new MistralClient(process.env.MISTRAL_API_KEY);
 
 const getAIResponse = async (userMessage) => {
     try {
-        if (!process.env.GEMINI_API_KEY) {
-            console.error("Error: GEMINI_API_KEY is missing in environment variables.");
+        if (!process.env.MISTRAL_API_KEY) {
+            console.error("Error: MISTRAL_API_KEY is missing in environment variables.");
             return "Server Error: API Key is missing. Please check .env file.";
         }
-
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
         const prompt = `
         You are a helpful and enthusiastic AI assistant for StayGenoe, a premium vacation rental application. 
@@ -26,12 +24,20 @@ const getAIResponse = async (userMessage) => {
         User Query: ${userMessage}
         `;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+        const response = await client.chat({
+            model: "mistral-small-latest",
+            messages: [
+                {
+                    role: "user",
+                    content: prompt,
+                }
+            ],
+        });
+
+        const text = response.choices[0].message.content;
         return text;
     } catch (error) {
-        console.error("Gemini API Error:", error);
+        console.error("Mistral API Error:", error);
         return `Error: ${error.message}`;
     }
 };

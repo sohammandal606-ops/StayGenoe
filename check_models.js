@@ -1,20 +1,27 @@
 require('dotenv').config();
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const MistralClient = require("@mistralai/mistralai").default;
 
-async function listModels() {
-    if (!process.env.GEMINI_API_KEY) {
+async function testMistralAPI() {
+    if (!process.env.MISTRAL_API_KEY) {
         console.error("API Key missing");
         return;
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const client = new MistralClient(process.env.MISTRAL_API_KEY);
 
-    console.log("Testing gemini-1.0-pro...");
+    console.log("Testing Mistral AI...");
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.0-pro" });
-        await model.generateContent("Hello");
-        console.log("Success with gemini-1.0-pro");
-    } catch (e) { console.log("Failed gemini-1.0-pro", e.message.split('\n')[0]); }
+        const response = await client.chat({
+            model: "mistral-small-latest",
+            messages: [
+                {
+                    role: "user",
+                    content: "Hello",
+                }
+            ],
+        });
+        console.log("Success with Mistral AI", response.choices[0].message.content);
+    } catch (e) { console.log("Failed Mistral AI", e.message.split('\n')[0]); }
 }
 
-listModels();
+testMistralAPI();

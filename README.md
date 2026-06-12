@@ -40,14 +40,14 @@ A full-stack web application built with Node.js, Express, MongoDB, and EJS that 
 - `helmet` - Security middleware
 - `joi` - Schema validation
 - `connect-flash` - Flash message handling
-- `@google/generative-ai` - AI chat functionality
+- `@mistralai/mistralai` - AI chat functionality
 
 ## 📋 Prerequisites
 
 - Node.js (v14 or higher)
 - npm or yarn
 - MongoDB (Local or Atlas)
-- Google Generative AI API Key (for chat feature)
+- Mistral AI API Key (for chat feature)
 
 ## 🔧 Installation
 
@@ -66,7 +66,7 @@ A full-stack web application built with Node.js, Express, MongoDB, and EJS that 
    ```
    MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/database-name
    NODE_ENV=development
-   GOOGLE_API_KEY=your-google-generative-ai-key
+   MISTRAL_API_KEY=your-mistral-api-key
    ```
 
 4. **Start the application:**
