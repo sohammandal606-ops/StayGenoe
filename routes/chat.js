@@ -5,6 +5,21 @@ const MistralClient = require("@mistralai/mistralai").default;
 
 const client = new MistralClient(process.env.MISTRAL_API_KEY);
 
+const spaceWords = (text) => {
+    const spacer = "   ";
+    return text
+        .split('\n')
+        .map(line => {
+            if (!line.trim()) return '';
+            return line
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean)
+                .join(spacer);
+        })
+        .join('\n');
+};
+
 const getAIResponse = async (userMessage) => {
     try {
         if (!process.env.MISTRAL_API_KEY) {
@@ -35,7 +50,8 @@ const getAIResponse = async (userMessage) => {
         });
 
         const text = response.choices[0].message.content;
-        return text;
+        const spacedText = spaceWords(text);
+        return spacedText;
     } catch (error) {
         console.error("Mistral API Error:", error);
         return `Error: ${error.message}`;
