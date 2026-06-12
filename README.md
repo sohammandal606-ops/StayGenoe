@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Airbnb Full Stack Project
+=======
+# StayGenoe
+>>>>>>> 4e1a50de52353cc799c4f8f9cbeb57300025eb9f
 
 A full-stack web application built with Node.js, Express, MongoDB, and EJS that replicates core features of Airbnb. Users can list properties, search for accommodations, read and write reviews, and communicate through an AI-powered chat feature.
 

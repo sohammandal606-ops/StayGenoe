@@ -9,6 +9,7 @@ const path = require('path');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
+const MongoStore = require('connect-mongo').default;
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
@@ -46,6 +47,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Session & Flash
 const sessionConfig = {
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI,
+        touchAfter: 24 * 3600
+    }),
     secret: 'thisshouldbeabettersecret!',
     resave: false,
     saveUninitialized: true,
