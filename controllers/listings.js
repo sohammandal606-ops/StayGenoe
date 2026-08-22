@@ -42,7 +42,7 @@ module.exports.createListing = async (req, res, next) => {
     }
 
     if (req.file) {
-        newListing.image = { url: "/uploads/" + req.file.filename, filename: req.file.filename };
+        newListing.image = { url: req.file.path, filename: req.file.filename };
     } else if (typeof req.body.listing.image === 'string' && req.body.listing.image) {
         // Fallback if user provides a string URL instead of a file (though form is multipart now)
         // If the form field is 'listing[image]' and it's a file input, req.body.listing.image might be empty or not exist.
@@ -86,7 +86,7 @@ module.exports.updateListing = async (req, res) => {
     let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
 
     if (typeof req.file !== "undefined") {
-        let url = "/uploads/" + req.file.filename;
+        let url = req.file.path;
         let filename = req.file.filename;
         listing.image = { url, filename };
         await listing.save();

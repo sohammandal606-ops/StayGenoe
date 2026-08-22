@@ -68,7 +68,7 @@ module.exports.uploadProfileImage = async (req, res) => {
 
     const user = await User.findById(req.user._id);
     user.image = {
-        url: "/uploads/" + req.file.filename,
+        url: req.file.path,
         filename: req.file.filename
     };
     await user.save();
