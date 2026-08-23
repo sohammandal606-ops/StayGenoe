@@ -13,6 +13,7 @@ const MongoStore = require('connect-mongo').default;
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('./models/user');
 const Listing = require('./models/listing');
 
@@ -67,6 +68,44 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
+
+// Google OAuth Strategy
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: '/auth/google/callback'
+}, async (accessToken, refreshToken, profile, done) => {
+    try {
+        // 1. Check if user already exists with this googleId
+        let user = await User.findOne({ googleId: profile.id });
+        if (user) return done(null, user);
+
+        // 2. Check if email is already registered (local account) — link Google to it
+        user = await User.findOne({ email: profile.emails[0].value });
+        if (user) {
+            user.googleId = profile.id;
+            await user.save();
+            return done(null, user);
+        }
+
+        // 3. Create a brand-new user from Google profile
+        const baseUsername = profile.displayName
+            ? profile.displayName.replace(/\s+/g, '_').toLowerCase()
+            : profile.emails[0].value.split('@')[0];
+
+        const newUser = new User({
+            email: profile.emails[0].value,
+            googleId: profile.id,
+            username: baseUsername,
+            image: { url: profile.photos[0] ? profile.photos[0].value : undefined }
+        });
+        await newUser.save();
+        return done(null, newUser);
+    } catch (err) {
+        return done(err, null);
+    }
+}));
+
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 

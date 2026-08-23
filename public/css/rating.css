@@ -38,7 +38,7 @@
 .starability-slot>input:checked~label:before,
 .starability-slot>input:focus~label:before,
 .starability-slot>input:hover~label:before {
-    color: #fe424d;
+    color: #ecfd00;
 }
 
 /* Starability Result Style (Static Display) */
@@ -61,7 +61,7 @@
     color: #ddd;
     /* Background stars color */
     letter-spacing: 2px;
-    background: linear-gradient(90deg, #fe424d 0%, #fe424d 0%, #ddd 0%);
+    background: linear-gradient(90deg, #ecfd00 0%, #ecfd00 0%, #ddd 0%);
     /* Gradient trick for filled stars */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -76,35 +76,35 @@
 */
 
 .starability-result[data-rating='1']:before {
-    background: linear-gradient(90deg, #fe424d 20%, #ddd 20%);
+    background: linear-gradient(90deg, #ecfd00 20%, #ddd 20%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .starability-result[data-rating='2']:before {
-    background: linear-gradient(90deg, #fe424d 40%, #ddd 40%);
+    background: linear-gradient(90deg, #ecfd00 40%, #ddd 40%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .starability-result[data-rating='3']:before {
-    background: linear-gradient(90deg, #fe424d 60%, #ddd 60%);
+    background: linear-gradient(90deg, #ecfd00 60%, #ddd 60%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .starability-result[data-rating='4']:before {
-    background: linear-gradient(90deg, #fe424d 80%, #ddd 80%);
+    background: linear-gradient(90deg, #ecfd00 80%, #ddd 80%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .starability-result[data-rating='5']:before {
-    background: linear-gradient(90deg, #fe424d 100%, #ddd 100%);
+    background: linear-gradient(90deg, #ecfd00 100%, #ddd 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;

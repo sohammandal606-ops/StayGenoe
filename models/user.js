@@ -8,6 +8,10 @@ const UserSchema = new Schema({
         required: true,
         unique: true
     },
+    googleId: {
+        type: String,
+        default: null
+    },
     image: {
         url: {
             type: String,
