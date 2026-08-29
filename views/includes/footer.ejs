@@ -1,10 +1,81 @@
-<footer class="footer">
-    <div class="container text-center">
-        <span class="text-muted">&copy; <%= new Date().getFullYear() %> StayGenoe, Inc.</span>
-        <div class="mt-2">
-            <a href="#" class="text-muted me-2"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#" class="text-muted me-2"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="text-muted"><i class="fa-brands fa-twitter"></i></a>
+<footer class="custom-footer">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Brand & Tagline -->
+            <div class="col-lg-4 col-md-6 mb-3">
+                <a class="footer-brand-title text-decoration-none" href="/listings">
+                    <i class="fa-solid fa-compass"></i>
+                    <span>StayGenoe</span>
+                </a>
+                <p class="footer-brand-desc">
+                    Discover handpicked luxury hotels, secluded villas, and bespoke stays worldwide with guaranteed best rates and seamless reservations.
+                </p>
+                <div class="footer-social-links">
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="footer-social-icon" aria-label="Facebook">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="footer-social-icon" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="footer-social-icon" aria-label="Twitter">
+                        <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="footer-social-icon" aria-label="LinkedIn">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Explore Links -->
+            <div class="col-lg-2 col-md-6 col-6 mb-3">
+                <h6 class="footer-heading">Explore</h6>
+                <ul class="footer-nav-list">
+                    <li><a href="/listings">All Stays</a></li>
+                    <li><a href="/listings?q=villa">Luxury Villas</a></li>
+                    <li><a href="/listings?q=beach">Beachfronts</a></li>
+                    <li><a href="/listings?q=resort">Top Resorts</a></li>
+                    <li><a href="/listings?q=mountain">Mountain Escapes</a></li>
+                </ul>
+            </div>
+
+            <!-- Company Links -->
+            <div class="col-lg-2 col-md-6 col-6 mb-3">
+                <h6 class="footer-heading">Company</h6>
+                <ul class="footer-nav-list">
+                    <li><a href="/listings#about">About Us</a></li>
+                    <li><a href="/listings/new">Host Your Home</a></li>
+                    <li><a href="/listings">Destinations</a></li>
+                    <li><a href="#">Press & Careers</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                </ul>
+            </div>
+
+            <!-- Support & Assistance -->
+            <div class="col-lg-4 col-md-6 mb-3">
+                <h6 class="footer-heading">Customer Care</h6>
+                <ul class="footer-nav-list">
+                    <li><a href="#">Help Center & FAQs</a></li>
+                    <li><a href="#">Cancellation Options</a></li>
+                    <li><a href="#">Safety Guidelines</a></li>
+                    <li><a href="#">Terms & Privacy Policy</a></li>
+                </ul>
+                <div class="mt-3 p-3 rounded-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <small class="text-white-50 d-block mb-1">Need 24/7 assistance?</small>
+                    <span class="text-white fw-bold"><i class="fa-solid fa-headset me-2 text-warning"></i>support@staygenoe.com</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Copyright Bar -->
+        <div class="footer-bottom-bar">
+            <span>&copy; <%= new Date().getFullYear() %> StayGenoe, Inc. All rights reserved.</span>
+            <div class="d-flex gap-3">
+                <a href="#" class="text-decoration-none">Privacy</a>
+                <span>&bull;</span>
+                <a href="#" class="text-decoration-none">Terms</a>
+                <span>&bull;</span>
+                <a href="#" class="text-decoration-none">Sitemap</a>
+            </div>
         </div>
     </div>
-</footer>
+</footer>

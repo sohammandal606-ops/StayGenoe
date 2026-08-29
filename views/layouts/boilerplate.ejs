@@ -25,12 +25,14 @@
 
   <%- include('../includes/navbar') %>
 
+  <main class="main-content-wrapper">
     <div class="container">
       <%- include('../includes/flash') %>
-        <%- body %>
     </div>
+    <%- body %>
+  </main>
 
-    <%- include('../includes/footer') %>
+  <%- include('../includes/footer') %>
 
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
@@ -40,27 +42,43 @@
         crossorigin="anonymous"></script>
       <script src="/js/script.js"></script>
 
-      <!-- Chat Bot Widget -->
+      <!-- StayGenoe AI Concierge Widget -->
       <link rel="stylesheet" href="/css/chat.css">
 
-      <button id="chatBtn" class="chat-btn">
-        <i class="fa-solid fa-robot"></i>
+      <button id="chatBtn" class="chat-btn" title="AI Concierge" aria-label="AI Concierge">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span class="chat-btn-pulse-dot"></span>
       </button>
 
       <div id="chatWindow" class="chat-window">
         <div class="chat-header">
-          <h5>StayGenoe Assistant</h5>
-          <button id="closeChat" class="close-chat">&times;</button>
+          <div class="chat-header-info">
+            <div class="chat-avatar-badge">
+              <i class="fa-solid fa-sparkles"></i>
+            </div>
+            <div>
+              <h5 class="chat-header-title">StayGenoe Concierge</h5>
+              <p class="chat-header-status">
+                <span class="chat-online-dot"></span> Online &bull; Instant AI
+              </p>
+            </div>
+          </div>
+          <button id="closeChat" class="close-chat" title="Close" aria-label="Close">&times;</button>
         </div>
         <div id="chatMessages" class="chat-messages">
           <div class="message bot">
-            Hello! I'm your AI assistant. How can I help you today?
+            Hello! I'm your StayGenoe luxury travel assistant. How can I help you find your dream stay today?
+            <div class="chat-quick-chips">
+              <span class="chat-chip" onclick="handleChipClick('Find luxury villas in Santorini')">Santorini Villas</span>
+              <span class="chat-chip" onclick="handleChipClick('How do I list my property?')">Host a Home</span>
+              <span class="chat-chip" onclick="handleChipClick('Trending beach stays')">Beach Stays</span>
+            </div>
           </div>
         </div>
         <div class="chat-input-area">
-          <input type="text" id="chatInput" placeholder="Type a message...">
-          <button id="sendMessage" class="send-btn">
-            <i class="fa-solid fa-paper-plane"></i>
+          <input type="text" id="chatInput" class="chat-input-control" placeholder="Ask anything about stays...">
+          <button id="sendMessage" class="send-btn" title="Send message" aria-label="Send message">
+            <i class="fa-solid fa-arrow-up"></i>
           </button>
         </div>
       </div>
@@ -76,11 +94,19 @@
         // Toggle Chat Window
         chatBtn.addEventListener('click', () => {
           chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
+          if (chatWindow.style.display === 'flex') {
+            chatInput.focus();
+          }
         });
 
         closeChat.addEventListener('click', () => {
           chatWindow.style.display = 'none';
         });
+
+        function handleChipClick(text) {
+          chatInput.value = text;
+          handleSendMessage();
+        }
 
         // Send Message
         async function handleSendMessage() {

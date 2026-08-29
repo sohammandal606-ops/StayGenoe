@@ -1,47 +1,145 @@
 <% layout('layouts/boilerplate') %>
 
-    <div class="row mt-3">
-        <div class="col-8 offset-2">
-            <h3 class="mb-3">Create a New Listing</h3>
+<div class="container form-page-wrapper">
+    <div class="form-layout-card">
+        <!-- Left Brand & Visual Panel -->
+        <div class="form-left-panel">
+            <div>
+                <div class="form-badges-group">
+                    <span class="form-badge-pill"><i class="fa-solid fa-hotel"></i> StayGenoe</span>
+                    <span class="form-badge-pill highlight"><i class="fa-solid fa-sparkles"></i> Host Mode</span>
+                    <span class="form-badge-pill">Global Reach</span>
+                </div>
+
+                <h1 class="form-headline">
+                    Host Property &mdash;<br>
+                    <span class="gradient-accent">Unlimited Possibilities.</span>
+                </h1>
+
+                <p class="form-subtext">
+                    Join thousands of world-class hosts on StayGenoe. Enjoy automated geocoding, instant global visibility, and secure reservations.
+                </p>
+            </div>
+
+            <!-- Host Status Card -->
+            <div class="form-host-profile-card">
+                <div class="form-host-avatar">
+                    <%= currentUser && currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'H' %>
+                </div>
+                <div>
+                    <h6 class="form-host-name"><%= currentUser ? currentUser.username : 'StayGenoe Host' %></h6>
+                    <p class="form-host-status">
+                        <span class="status-dot"></span> Verified Partner Program
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Form Panel -->
+        <div class="form-right-panel">
+            <h2 class="form-header-title">
+                <span>Create New Listing &mdash;</span>
+                <span class="header-dot"></span>
+            </h2>
+
             <form action="/listings" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="title" class="form-label">Title</label>
-                    <input type="text" name="listing[title]" placeholder="Add a catchy title" class="form-control"
-                        required>
-                    <div class="valid-feedback">Looks good!</div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea name="listing[description]" class="form-control" required></textarea>
-                    <div class="invalid-feedback">Please enter a short description</div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="image" class="form-label">Upload Image</label>
-                    <input type="file" name="listing[image]" class="form-control" required>
-                </div>
-
-                <div class="row">
-                    <div class="mb-3 col-md-4">
-                        <label for="price" class="form-label">Price</label>
-                        <input type="number" name="listing[price]" placeholder="1200" class="form-control" required>
-                        <div class="invalid-feedback">Price should be valid</div>
+                <!-- Title & Price (2 Columns) -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-7">
+                        <label for="title" class="form-label-custom">
+                            Listing Title <span class="required-star">*</span>
+                        </label>
+                        <input type="text" id="title" name="listing[title]" placeholder="e.g. Modern Cliffside Villa"
+                            class="form-control form-control-dark" required>
+                        <div class="invalid-feedback">Please enter a descriptive title.</div>
                     </div>
 
-                    <div class="mb-3 col-md-8">
-                        <label for="country" class="form-label">Country</label>
-                        <input type="text" name="listing[country]" placeholder="India" class="form-control" required>
+                    <div class="col-md-5">
+                        <label for="price" class="form-label-custom">
+                            Price / Night (&#8377;) <span class="required-star">*</span>
+                        </label>
+                        <input type="number" id="price" name="listing[price]" placeholder="3500"
+                            class="form-control form-control-dark" min="100" required>
+                        <div class="invalid-feedback">Please enter a valid price.</div>
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="location" class="form-label">Location</label>
-                    <input type="text" name="listing[location]" placeholder="Jaipur, Rajasthan" class="form-control"
-                        required>
+                <!-- Location & Country (2 Columns) -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label for="location" class="form-label-custom">
+                            City / Location <span class="required-star">*</span>
+                        </label>
+                        <input type="text" id="location" name="listing[location]" placeholder="e.g. Santorini, Cyclades"
+                            class="form-control form-control-dark" required>
+                        <div class="invalid-feedback">Location is required.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="country" class="form-label-custom">
+                            Country <span class="required-star">*</span>
+                        </label>
+                        <input type="text" id="country" name="listing[country]" placeholder="e.g. Greece"
+                            class="form-control form-control-dark" required>
+                        <div class="invalid-feedback">Country is required.</div>
+                    </div>
                 </div>
 
-                <button class="btn btn-primary">Add Listing</button>
+                <!-- Image Upload Dropzone -->
+                <div class="mb-3">
+                    <label class="form-label-custom">
+                        Property Cover Photo <span class="required-star">*</span>
+                    </label>
+                    <div class="upload-dropzone-box" id="dropzoneBox">
+                        <input type="file" id="listingImage" name="listing[image]" accept="image/*" required>
+                        <div class="upload-icon">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+                        <p class="upload-dropzone-text" id="uploadFilename">Click here to upload property photo</p>
+                        <span class="upload-subtext">Supports high-res JPG, PNG, WEBP up to 10MB</span>
+                    </div>
+                    <div class="invalid-feedback d-block" id="imageFeedback" style="display: none !important;">Please upload a cover image.</div>
+                </div>
+
+                <!-- Description Textarea -->
+                <div class="mb-4">
+                    <label for="description" class="form-label-custom">
+                        About this Space <span class="required-star">*</span>
+                    </label>
+                    <textarea id="description" name="listing[description]" rows="3"
+                        placeholder="Describe the rooms, views, amenities, and unique highlights..."
+                        class="form-control form-control-dark" required></textarea>
+                    <div class="invalid-feedback">Please provide a short description of the property.</div>
+                </div>
+
+                <!-- Terms checkbox -->
+                <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" value="" id="termsCheck" required checked>
+                    <label class="form-check-label text-white-50 small" for="termsCheck">
+                        I confirm that the property information and photos provided are accurate and comply with hosting guidelines.
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-glow-submit">
+                    <span>Create Listing</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
             </form>
         </div>
     </div>
+</div>
+
+<script>
+    // File input name preview
+    const fileInput = document.getElementById('listingImage');
+    const uploadText = document.getElementById('uploadFilename');
+
+    if (fileInput && uploadText) {
+        fileInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                uploadText.innerHTML = '<i class="fa-solid fa-circle-check text-success me-1"></i> Selected: <strong>' + this.files[0].name + '</strong>';
+            }
+        });
+    }
+</script>

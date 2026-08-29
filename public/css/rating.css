@@ -1,111 +1,127 @@
-/* Starability Slot Input Style */
+/* ==========================================================================
+   STAR RATING — INTERACTIVE (INPUT FORM)
+   Uses float:right trick with inputs in REVERSE order (5→1 in DOM)
+   so the CSS general sibling selector (~) correctly fills left-to-right.
+   ========================================================================== */
+
 .starability-slot {
     display: block;
     position: relative;
-    width: 150px;
-    min-height: 60px;
+    width: 160px;
+    min-height: 40px;
     padding: 0;
     border: none;
+    overflow: hidden;
 }
 
-.starability-slot>input {
+/* Hide the actual radio inputs */
+.starability-slot > input {
     position: absolute;
-    margin-right: -100%;
     opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
 }
 
-.starability-slot>label {
-    position: relative;
-    display: block;
-    /* Fixed: was inline-block, but float makes it block */
+/* Labels float right so DOM order 5→1 renders visually as 1→2→3→4→5 */
+.starability-slot > label {
     float: right;
     width: 30px;
     height: 30px;
     color: transparent;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
 
-.starability-slot>label:before {
-    display: inline-block;
-    content: '\f005';
-    /* FontAwesome Star */
+/* Star icon for each label */
+.starability-slot > label:before {
+    display: block;
+    content: '\f005'; /* FontAwesome star */
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     font-size: 1.5rem;
-    color: #ddd;
+    line-height: 1;
+    color: #d5d5d5;
+    transition: color 0.15s ease;
 }
 
-.starability-slot>input:checked~label:before,
-.starability-slot>input:focus~label:before,
-.starability-slot>input:hover~label:before {
-    color: #ecfd00;
+/*
+  When a radio is CHECKED, light it up + all siblings AFTER it in DOM
+  (which appear to the LEFT visually because of float:right).
+  Since inputs are ordered 5→4→3→2→1, checking "3" means:
+  rate3 is checked → rate3 label gets gold, then ~ hits rate2 label, rate1 label = also gold.
+*/
+.starability-slot > input:checked ~ label:before,
+.starability-slot > label:hover ~ label:before,
+.starability-slot > label:hover:before {
+    color: #f5c518;
 }
 
-/* Starability Result Style (Static Display) */
+/* ==========================================================================
+   STAR RATING — STATIC RESULT DISPLAY (review cards)
+   ========================================================================== */
 .starability-result {
-    position: relative;
-    width: 150px;
-    height: 30px;
-    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    height: 24px;
+    font-size: 0;
     border: none;
-    display: inline-block;
+    padding: 0;
 }
 
+/* Use ::before to render 5 star icons then clip with gradient */
 .starability-result:before {
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
-    display: inline-block;
-    font-size: 1.25rem;
+    font-size: 1.05rem;
     content: '\f005 \f005 \f005 \f005 \f005';
-    /* 5 stars */
-    color: #ddd;
-    /* Background stars color */
-    letter-spacing: 2px;
-    background: linear-gradient(90deg, #ecfd00 0%, #ecfd00 0%, #ddd 0%);
-    /* Gradient trick for filled stars */
+    letter-spacing: 3px;
+    color: #d5d5d5;
+    background: linear-gradient(90deg, #f5c518 0%, #d5d5d5 0%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
-/* 
-   Since we don't have the sophisticated mixing of the original library easily without SCSS,
-   We will use data attributes to set the background gradient percentage.
-   Actually, the easiest way for static stars without complex CSS generation is classes.
-   But the view uses `data-rating`. Let's use attribute selectors which is cleaner.
-*/
-
+/* 1 star = 20% fill */
 .starability-result[data-rating='1']:before {
-    background: linear-gradient(90deg, #ecfd00 20%, #ddd 20%);
+    background: linear-gradient(90deg, #f5c518 20%, #d5d5d5 20%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
+/* 2 stars = 40% fill */
 .starability-result[data-rating='2']:before {
-    background: linear-gradient(90deg, #ecfd00 40%, #ddd 40%);
+    background: linear-gradient(90deg, #f5c518 40%, #d5d5d5 40%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
+/* 3 stars = 60% fill */
 .starability-result[data-rating='3']:before {
-    background: linear-gradient(90deg, #ecfd00 60%, #ddd 60%);
+    background: linear-gradient(90deg, #f5c518 60%, #d5d5d5 60%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
+/* 4 stars = 80% fill */
 .starability-result[data-rating='4']:before {
-    background: linear-gradient(90deg, #ecfd00 80%, #ddd 80%);
+    background: linear-gradient(90deg, #f5c518 80%, #d5d5d5 80%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
+/* 5 stars = 100% fill */
 .starability-result[data-rating='5']:before {
-    background: linear-gradient(90deg, #ecfd00 100%, #ddd 100%);
+    background: linear-gradient(90deg, #f5c518 100%, #d5d5d5 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-}
+}

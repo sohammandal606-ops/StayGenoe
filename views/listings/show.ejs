@@ -1,166 +1,384 @@
 <% layout('layouts/boilerplate') %>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <div class="row mt-3">
-        <div class="col-8 offset-2">
-            <h3 class="listing-title">
-                <%= listing.title %>
-            </h3>
+<div class="container show-page-wrapper">
+    <!-- Top Header -->
+    <div class="show-header-row">
+        <div>
+            <h1 class="show-headline">Entire rental unit in <%= listing.location %>, <%= listing.country %></h1>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="show-share-btn" onclick="navigator.clipboard.writeText(window.location.href); alert('Listing link copied to clipboard!');">
+                <i class="fa-solid fa-arrow-up-from-bracket"></i> Share
+            </button>
+        </div>
+    </div>
+
+    <!-- 5-Photo Mosaic Gallery -->
+    <div class="gallery-mosaic-grid">
+        <!-- Main Large Photo -->
+        <div class="gallery-main-col">
+            <img src="<%= listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200' %>"
+                class="gallery-main-img" alt="<%= listing.title %>">
         </div>
 
-        <div class="card col-6 offset-3 show-card listing-card glass-card">
-            <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing_image">
-            <div class="card-body">
-                <p class="card-text">Owned by <i>
-                        <%= listing.owner.username %>
-                    </i></p>
-                <p class="card-text">
+        <!-- 4 Secondary Photos (2x2 Grid) -->
+        <div class="gallery-sub-grid">
+            <div class="gallery-sub-item">
+                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=600&auto=format&fit=crop"
+                    class="gallery-sub-img" alt="Master Bedroom">
+            </div>
+            <div class="gallery-sub-item">
+                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=600&auto=format&fit=crop"
+                    class="gallery-sub-img" alt="Luxury Bathroom">
+            </div>
+            <div class="gallery-sub-item">
+                <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=600&auto=format&fit=crop"
+                    class="gallery-sub-img" alt="Living Room">
+            </div>
+            <div class="gallery-sub-item">
+                <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=600&auto=format&fit=crop"
+                    class="gallery-sub-img" alt="Balcony & View">
+            </div>
+        </div>
+
+        <button class="all-photos-badge" onclick="window.scrollTo({top: 500, behavior: 'smooth'})">
+            <i class="fa-solid fa-grip"></i> Show all photos
+        </button>
+    </div>
+
+    <!-- Main Content & Reservation Grid -->
+    <div class="row g-5">
+        <!-- Left Details Column -->
+        <div class="col-lg-7">
+            <!-- Location & Title -->
+            <div class="mb-2">
+                <span class="text-muted" style="font-size: 0.95rem;">
+                    <i class="fa-solid fa-location-dot text-danger me-1"></i> <%= listing.location %>, <%= listing.country %>
+                </span>
+            </div>
+            <h2 class="fw-bold mb-2" style="color: var(--primary-color);"><%= listing.title %></h2>
+            <p class="text-muted mb-4" style="font-size: 0.95rem;">
+                4-8 Guests &bull; 2 Bedrooms &bull; 4 Beds &bull; 2 Baths
+            </p>
+
+            <button class="btn-check-availability mb-3" onclick="document.getElementById('bookingCard').scrollIntoView({behavior: 'smooth'})">
+                <i class="fa-solid fa-calendar-check"></i> Check Availability
+            </button>
+
+            <!-- Guest Favourite Banner Card -->
+            <div class="guest-favourite-card">
+                <h4 class="guest-favourite-title">
+                    <i class="fa-solid fa-award text-warning"></i>
+                    <span>Guest Favourite</span>
+                </h4>
+                <div class="guest-favourite-stats">
+                    <div class="favourite-score">
+                        <span>4.96</span>
+                        <div class="favourite-stars">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="favourite-reviews-count">
+                        <span><%= listing.reviews ? listing.reviews.length : 0 %></span>
+                        <small>Reviews</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Host Information -->
+            <div class="d-flex align-items-center gap-3 py-3 border-bottom border-top my-4">
+                <div class="rounded-circle d-flex align-items-center justify-content-center bg-secondary text-white fw-bold"
+                    style="width: 52px; height: 52px; font-size: 1.2rem;">
+                    <%= listing.owner && listing.owner.username ? listing.owner.username.charAt(0).toUpperCase() : 'H' %>
+                </div>
+                <div>
+                    <h6 class="mb-0 fw-bold">Hosted by <%= listing.owner ? listing.owner.username : 'Superhost' %></h6>
+                    <small class="text-muted">Superhost &bull; 3 years hosting on StayGenoe</small>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-4">
+                <h5 class="fw-bold mb-3">About this space</h5>
+                <p class="text-secondary" style="line-height: 1.7; font-size: 0.98rem;">
                     <%= listing.description %>
                 </p>
-                <p class="card-text">&#8377; <%= listing.price.toLocaleString("en-IN") %>
-                </p>
-                <p class="card-text">
-                    <%= listing.location %>
-                </p>
-                <p class="card-text">
-                    <%= listing.country %>
+            </div>
+
+            <!-- Amenities -->
+            <div class="mb-4 py-3 border-top">
+                <h5 class="fw-bold mb-3">What this place offers</h5>
+                <div class="row row-cols-2 g-3">
+                    <div class="col d-flex align-items-center gap-2 text-secondary">
+                        <i class="fa-solid fa-wifi text-muted"></i> High-speed Fast Wi-Fi
+                    </div>
+                    <div class="col d-flex align-items-center gap-2 text-secondary">
+                        <i class="fa-solid fa-kitchen-set text-muted"></i> Fully equipped kitchen
+                    </div>
+                    <div class="col d-flex align-items-center gap-2 text-secondary">
+                        <i class="fa-solid fa-car text-muted"></i> Free parking on premises
+                    </div>
+                    <div class="col d-flex align-items-center gap-2 text-secondary">
+                        <i class="fa-solid fa-snowflake text-muted"></i> Central air conditioning
+                    </div>
+                    <div class="col d-flex align-items-center gap-2 text-secondary">
+                        <i class="fa-solid fa-tv text-muted"></i> 65" 4K Smart TV
+                    </div>
+                    <div class="col d-flex align-items-center gap-2 text-secondary">
+                        <i class="fa-solid fa-shield-halved text-muted"></i> 24/7 Security & Keyless entry
+                    </div>
+                </div>
+            </div>
+
+            <!-- Owner Action Buttons -->
+            <% if(currentUser && listing.owner && listing.owner._id.equals(currentUser._id)) { %>
+                <div class="d-flex gap-3 my-4 p-3 rounded-4 bg-light border">
+                    <a href="/listings/<%= listing._id %>/edit" class="btn btn-primary px-4 rounded-pill">
+                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit Listing
+                    </a>
+                    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline">
+                        <button class="btn btn-outline-danger px-4 rounded-pill" onclick="return confirm('Are you sure you want to delete this listing?')">
+                            <i class="fa-solid fa-trash me-1"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            <% } %>
+
+            <!-- Leave a Review -->
+            <% if(currentUser) { %>
+                <div class="mt-4 pt-4 border-top">
+                    <h5 class="fw-bold mb-3">Leave a Review</h5>
+                    <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
+                        <div class="mb-3">
+                            <label for="rating" class="form-label fw-semibold">Rating</label>
+                            <fieldset class="starability-slot">
+                                <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                                <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                                <label for="first-rate5" title="Amazing">5 stars</label>
+                                <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                                <label for="first-rate4" title="Very good">4 stars</label>
+                                <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                                <label for="first-rate3" title="Average">3 stars</label>
+                                <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                                <label for="first-rate2" title="Not good">2 stars</label>
+                                <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                                <label for="first-rate1" title="Terrible">1 star</label>
+                            </fieldset>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment" class="form-label fw-semibold">Your Review</label>
+                            <textarea name="review[comment]" id="comment" cols="30" rows="4" class="form-control"
+                                placeholder="Share your experience staying here..." required></textarea>
+                            <div class="invalid-feedback">Please add some comments for your review.</div>
+                        </div>
+                        <button class="btn btn-primary rounded-pill px-4">Submit Review</button>
+                    </form>
+                </div>
+            <% } %>
+
+            <!-- All Reviews List -->
+            <% if (listing.reviews && listing.reviews.length > 0) { %>
+                <div class="mt-5 pt-4 border-top">
+                    <h5 class="fw-bold mb-4">
+                        <i class="fa-solid fa-star text-warning me-1"></i> All Reviews (<%= listing.reviews.length %>)
+                    </h5>
+                    <div class="row g-3">
+                        <% for(let review of listing.reviews) { %>
+                            <div class="col-md-6">
+                                <div class="card h-100 review-card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+                                                style="width: 34px; height: 34px; font-size: 0.85rem;">
+                                                <%= review.author && review.author.username ? review.author.username.charAt(0).toUpperCase() : 'U' %>
+                                            </div>
+                                            <div>
+                                                <h6 class="card-title mb-0 fw-bold">@<%= review.author ? review.author.username : 'Guest' %></h6>
+                                                <small class="starability-result" data-rating="<%= review.rating %>"></small>
+                                            </div>
+                                        </div>
+                                        <p class="card-text text-secondary mb-2" style="font-size: 0.9rem;">
+                                            <%= review.comment %>
+                                        </p>
+                                    </div>
+                                    <% if(currentUser && review.author && review.author._id.equals(currentUser._id)) { %>
+                                        <div class="card-footer bg-transparent border-0 pt-0">
+                                            <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                                                <button class="btn btn-sm btn-outline-danger rounded-pill px-3">Delete</button>
+                                            </form>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Right Reservation & Floor Plan Column -->
+        <div class="col-lg-5">
+            <div class="booking-sticky-card" id="bookingCard">
+                <!-- Tour Tabs (Floor Plan / Room Tour) -->
+                <div class="tour-tab-group">
+                    <button type="button" class="tour-tab-btn active" id="tabFloorPlan">
+                        <i class="fa-solid fa-layer-group me-1"></i> Floor Plan
+                    </button>
+                    <button type="button" class="tour-tab-btn" id="tabRoomTour">
+                        <i class="fa-solid fa-panorama me-1"></i> Room Tour
+                    </button>
+                </div>
+
+                <!-- Architectural Floor Plan Preview Image -->
+                <div class="floorplan-img-container">
+                    <img id="tourDisplayImg" 
+                        src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop" 
+                        alt="Floor Plan Architecture">
+                </div>
+
+                <!-- Price & Instant Reservation Details -->
+                <div class="d-flex align-items-baseline justify-content-between mb-3">
+                    <div>
+                        <span class="fs-3 fw-bold" style="color: var(--accent-orange);">&#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : '2,500' %></span>
+                        <span class="text-muted fw-semibold"> / night</span>
+                    </div>
+                    <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-bold">Best Rate Guarantee</span>
+                </div>
+
+                <!-- Reservation Mock Inputs -->
+                <div class="border rounded-4 p-3 mb-3 bg-light">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted mb-1">CHECK-IN</label>
+                            <input type="date" class="form-control form-control-sm bg-white" value="<%= new Date().toISOString().split('T')[0] %>">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted mb-1">CHECK-OUT</label>
+                            <input type="date" class="form-control form-control-sm bg-white" value="<%= new Date(Date.now() + 86400000*3).toISOString().split('T')[0] %>">
+                        </div>
+                        <div class="col-12 mt-2">
+                            <label class="form-label small fw-bold text-muted mb-1">GUESTS</label>
+                            <select class="form-select form-select-sm bg-white">
+                                <option>1 Guest</option>
+                                <option selected>2 Guests</option>
+                                <option>3 Guests</option>
+                                <option>4+ Guests</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary w-100 py-3 rounded-pill fw-bold fs-6 shadow-sm mb-3" onclick="alert('Reservation request initiated for <%= listing.title %>!')">
+                    Reserve Now
+                </button>
+
+                <p class="text-center text-muted small mb-0">
+                    <i class="fa-solid fa-lock me-1"></i> You won't be charged yet &bull; Instant Confirmation
                 </p>
             </div>
         </div>
-
-        <% if(currentUser && listing.owner._id.equals(currentUser._id)) { %>
-            <div class="btns mb-3 d-flex col-6 offset-3 mt-3">
-                <a href="/listings/<%= listing._id %>/edit" class="btn btn-primary col-2 offset-3 me-3">Edit</a>
-                <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
-                    <button class="btn btn-dark offset-5">Delete</button>
-                </form>
-            </div>
-            <% } %>
-
-                <div class="col-8 offset-2 mb-3">
-                    <% if(currentUser) { %>
-                        <hr>
-                        <h4>Leave a Review</h4>
-                        <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate
-                            class="needs-validation">
-                            <div class="mb-3 mt-3">
-                                <label for="rating" class="form-label">Rating</label>
-                                <fieldset class="starability-slot">
-                                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]"
-                                        value="1" checked aria-label="No rating." />
-                                    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                                    <label for="first-rate1" title="Terrible">1 star</label>
-                                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                                    <label for="first-rate2" title="Not good">2 stars</label>
-                                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                                    <label for="first-rate3" title="Average">3 stars</label>
-                                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                                    <label for="first-rate4" title="Very good">4 stars</label>
-                                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                                    <label for="first-rate5" title="Amazing">5 stars</label>
-                                </fieldset>
-                            </div>
-                            <div class="mb-3 mt-3">
-                                <label for="comment" class="form-label">Comments</label>
-                                <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control"
-                                    required></textarea>
-                            </div>
-                            <button class="btn btn-outline-dark">Submit</button>
-                        </form>
-                        <% } %>
-
-                            <% if (listing.reviews.length> 0) { %>
-                                <hr>
-                                <div class="row">
-                                    <p><b>All Reviews</b></p>
-                                    <% for(review of listing.reviews) { %>
-                                        <div class="card col-5 ms-3 mb-3 p-3 review-card glass-card">
-                                            <div class="card-body">
-                                                <h5 class="card-title">@<%= review.author.username %>
-                                                </h5>
-                                                <p class="card-text">
-                                                    <%= review.comment %>
-                                                </p>
-                                                <p class="starability-result card-text"
-                                                    data-rating="<%= review.rating %>"></p>
-                                                <small>(Rating: <%= review.rating %>)</small>
-                                            </div>
-                                            <% if(currentUser && review.author._id.equals(currentUser._id)) { %>
-                                                <form class="mb-3" method="POST"
-                                                    action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
-                                                    <button class="btn btn-sm btn-dark mt-2">Delete</button>
-                                                </form>
-                                                <% } %>
-                                        </div>
-                                        <% } %>
-                                </div>
-                                <% } %>
-                </div>
     </div>
-    </div>
-    <div class="col-8 offset-2 mb-5">
-        <h3 class="mb-3">Where you'll be</h3>
-        <p class="text-muted mb-3" style="font-size:0.95rem;">
-            <i class="fa-solid fa-location-dot me-1" style="color:#ff385c;"></i>
+
+    <!-- ==========================================
+         MAP SECTION ("Where you'll be")
+         ========================================== -->
+    <div class="mt-5 pt-4 border-top">
+        <h3 class="fw-bold mb-2">Where you'll be</h3>
+        <p class="text-muted mb-3" style="font-size: 0.95rem;">
+            <i class="fa-solid fa-location-dot me-1 text-danger"></i>
             <%= listing.location %>, <%= listing.country %>
         </p>
-        <div id="map" class="map-container"></div>
-        <p class="text-muted mt-2" style="font-size:0.85rem;">
+        <div id="map" class="map-container" style="min-height: 420px; width: 100%; border-radius: 20px; z-index: 1;"></div>
+        <p class="text-muted mt-2" style="font-size: 0.85rem;">
             <i class="fa-solid fa-circle-info me-1"></i>
-            Exact location provided after booking.
+            Exact location provided after booking confirmation.
         </p>
     </div>
+</div>
 
-    <script>
-        (function() {
-            // Get coordinates from listing geometry
-            var coords = <%- JSON.stringify(
-                listing.geometry &&
-                listing.geometry.coordinates &&
-                listing.geometry.coordinates[0] !== 0
-                    ? [listing.geometry.coordinates[1], listing.geometry.coordinates[0]]
-                    : [20.5937, 78.9629]
-            ) %>;
+<!-- Tour Tab Switcher & Map Script -->
+<script>
+    // Tab switching between Floor Plan and Room Tour
+    const tabFloorPlan = document.getElementById('tabFloorPlan');
+    const tabRoomTour = document.getElementById('tabRoomTour');
+    const tourImg = document.getElementById('tourDisplayImg');
 
-            // Detect dark mode
-            var isDark = document.body.classList.contains('dark-mode');
+    if (tabFloorPlan && tabRoomTour && tourImg) {
+        tabFloorPlan.addEventListener('click', () => {
+            tabFloorPlan.classList.add('active');
+            tabRoomTour.classList.remove('active');
+            tourImg.src = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop';
+        });
 
-            // Choose tile layer based on theme
-            var tileUrl = isDark
-                ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-                : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        tabRoomTour.addEventListener('click', () => {
+            tabRoomTour.classList.add('active');
+            tabFloorPlan.classList.remove('active');
+            tourImg.src = 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800&auto=format&fit=crop';
+        });
+    }
 
-            var tileAttrib = isDark
-                ? '&copy; <a href="https://carto.com/">CARTO</a>'
-                : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+    // Initialize Leaflet Map
+    document.addEventListener('DOMContentLoaded', function() {
+        var coords = <%- JSON.stringify(
+            listing.geometry &&
+            listing.geometry.coordinates &&
+            listing.geometry.coordinates[0] !== 0
+                ? [listing.geometry.coordinates[1], listing.geometry.coordinates[0]]
+                : [28.6139, 77.2090]
+        ) %>;
 
-            var map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView(coords, 13);
+        // Use high-resolution, crystal-clear, watermark-free street map tiles
+        var map = L.map('map', { 
+            zoomControl: true, 
+            scrollWheelZoom: false 
+        }).setView(coords, 14);
 
-            L.tileLayer(tileUrl, {
-                attribution: tileAttrib,
-                maxZoom: 19
-            }).addTo(map);
+        // OpenStreetMap Standard / Humanitarian clean tiles (no watermarks, full real-world detail)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
-            // Custom red marker icon
-            var redIcon = L.divIcon({
-                className: '',
-                html: '<div class="map-marker-pin"><i class="fa-solid fa-house"></i></div>',
-                iconSize: [40, 40],
-                iconAnchor: [20, 40],
-                popupAnchor: [0, -42]
-            });
+        // Add soft Airbnb-style neighborhood proximity circle
+        L.circle(coords, {
+            color: '#e0642f',
+            fillColor: '#e0642f',
+            fillOpacity: 0.12,
+            weight: 2,
+            radius: 500
+        }).addTo(map);
 
-            var marker = L.marker(coords, { icon: redIcon }).addTo(map);
+        // Custom modern house marker pin
+        var customIcon = L.divIcon({
+            className: '',
+            html: '<div class="map-marker-pin"><i class="fa-solid fa-house"></i></div>',
+            iconSize: [42, 42],
+            iconAnchor: [21, 42],
+            popupAnchor: [0, -44]
+        });
 
-            marker.bindPopup(
-                '<div class="map-popup">'
-                + '<strong><%= listing.title %></strong>'
-                + '<br><span><i class="fa-solid fa-location-dot"></i> <%= listing.location %>, <%= listing.country %></span>'
-                + '</div>',
-                { maxWidth: 220 }
-            ).openPopup();
-        })();
-    </script>
+        var marker = L.marker(coords, { icon: customIcon }).addTo(map);
+
+        marker.bindPopup(
+            '<div class="map-popup">'
+            + '<strong><%= listing.title %></strong>'
+            + '<div class="mt-1"><i class="fa-solid fa-location-dot text-danger me-1"></i> <%= listing.location %>, <%= listing.country %></div>'
+            + '<div class="mt-2 text-muted small"><i class="fa-solid fa-shield-halved text-success me-1"></i> Verified Neighborhood</div>'
+            + '</div>',
+            { maxWidth: 240 }
+        ).openPopup();
+
+        // Invalidate map size to ensure tile calculation is crisp
+        setTimeout(function() {
+            map.invalidateSize();
+        }, 250);
+    });
+</script>

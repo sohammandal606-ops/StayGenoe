@@ -1,47 +1,149 @@
 <% layout('layouts/boilerplate') %>
 
-    <div class="row mt-3">
-        <div class="col-8 offset-2">
-            <h3 class="mb-3">Edit your Listing</h3>
+<div class="container form-page-wrapper">
+    <div class="form-layout-card">
+        <!-- Left Brand & Visual Panel -->
+        <div class="form-left-panel">
+            <div>
+                <div class="form-badges-group">
+                    <span class="form-badge-pill"><i class="fa-solid fa-pen-to-square"></i> Edit Mode</span>
+                    <span class="form-badge-pill highlight"><i class="fa-solid fa-sparkles"></i> Manage Stay</span>
+                    <span class="form-badge-pill">ID: <%= listing._id.toString().substring(0, 8) %>...</span>
+                </div>
+
+                <h1 class="form-headline">
+                    Edit Listing &mdash;<br>
+                    <span class="gradient-accent">Refine & Elevate.</span>
+                </h1>
+
+                <p class="form-subtext">
+                    Keep your property details updated to boost your booking inquiries and maintain top-tier ratings across StayGenoe.
+                </p>
+            </div>
+
+            <!-- Host Status Card -->
+            <div class="form-host-profile-card">
+                <div class="form-host-avatar">
+                    <%= currentUser && currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'H' %>
+                </div>
+                <div>
+                    <h6 class="form-host-name"><%= currentUser ? currentUser.username : 'StayGenoe Host' %></h6>
+                    <p class="form-host-status">
+                        <span class="status-dot"></span> Property Owner
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Form Panel -->
+        <div class="form-right-panel">
+            <h2 class="form-header-title">
+                <span>Update Property Details &mdash;</span>
+                <span class="header-dot"></span>
+            </h2>
+
             <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" novalidate class="needs-validation"
                 enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="title" class="form-label">Title</label>
-                    <input type="text" name="listing[title]" value="<%= listing.title %>" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea name="listing[description]" class="form-control"
-                        required><%= listing.description %></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="image" class="form-label">Upload New Image</label>
-                    <input type="file" name="listing[image]" class="form-control">
-                </div>
-
-                <div class="row">
-                    <div class="mb-3 col-md-4">
-                        <label for="price" class="form-label">Price</label>
-                        <input type="number" name="listing[price]" value="<%= listing.price %>" class="form-control"
-                            required>
+                
+                <!-- Title & Price (2 Columns) -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-7">
+                        <label for="title" class="form-label-custom">
+                            Listing Title <span class="required-star">*</span>
+                        </label>
+                        <input type="text" id="title" name="listing[title]" value="<%= listing.title %>"
+                            class="form-control form-control-dark" required>
+                        <div class="invalid-feedback">Please enter a valid title.</div>
                     </div>
 
-                    <div class="mb-3 col-md-8">
-                        <label for="country" class="form-label">Country</label>
-                        <input type="text" name="listing[country]" value="<%= listing.country %>" class="form-control"
-                            required>
+                    <div class="col-md-5">
+                        <label for="price" class="form-label-custom">
+                            Price / Night (&#8377;) <span class="required-star">*</span>
+                        </label>
+                        <input type="number" id="price" name="listing[price]" value="<%= listing.price %>"
+                            class="form-control form-control-dark" min="100" required>
+                        <div class="invalid-feedback">Please enter a valid price.</div>
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="location" class="form-label">Location</label>
-                    <input type="text" name="listing[location]" value="<%= listing.location %>" class="form-control"
-                        required>
+                <!-- Location & Country (2 Columns) -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label for="location" class="form-label-custom">
+                            City / Location <span class="required-star">*</span>
+                        </label>
+                        <input type="text" id="location" name="listing[location]" value="<%= listing.location %>"
+                            class="form-control form-control-dark" required>
+                        <div class="invalid-feedback">Location is required.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="country" class="form-label-custom">
+                            Country <span class="required-star">*</span>
+                        </label>
+                        <input type="text" id="country" name="listing[country]" value="<%= listing.country %>"
+                            class="form-control form-control-dark" required>
+                        <div class="invalid-feedback">Country is required.</div>
+                    </div>
                 </div>
 
-                <button class="btn btn-primary">Update Listing</button>
+                <!-- Current Image & Upload Dropzone -->
+                <div class="mb-3">
+                    <label class="form-label-custom">Property Image</label>
+                    <% if (listing.image && listing.image.url) { %>
+                        <div class="current-img-thumbnail-box">
+                            <img src="<%= listing.image.url %>" alt="<%= listing.title %>" class="current-img-thumb">
+                            <div>
+                                <small class="text-white-50 d-block">Current Cover Photo</small>
+                                <span class="text-white small fw-semibold">Upload a new photo below only to replace it</span>
+                            </div>
+                        </div>
+                    <% } %>
+                    <div class="upload-dropzone-box" id="dropzoneBox">
+                        <input type="file" id="listingImage" name="listing[image]" accept="image/*">
+                        <div class="upload-icon">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+                        <p class="upload-dropzone-text" id="uploadFilename">Click here to upload new photo (optional)</p>
+                        <span class="upload-subtext">Supports high-res JPG, PNG, WEBP up to 10MB</span>
+                    </div>
+                </div>
+
+                <!-- Description Textarea -->
+                <div class="mb-4">
+                    <label for="description" class="form-label-custom">
+                        About this Space <span class="required-star">*</span>
+                    </label>
+                    <textarea id="description" name="listing[description]" rows="3"
+                        class="form-control form-control-dark" required><%= listing.description %></textarea>
+                    <div class="invalid-feedback">Please enter a description.</div>
+                </div>
+
+                <!-- Actions Row -->
+                <div class="d-flex gap-3">
+                    <a href="/listings/<%= listing._id %>" class="btn btn-outline-secondary rounded-pill px-4" style="border-color: rgba(255,255,255,0.2); color: #d1e5e3;">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn-glow-submit flex-fill">
+                        <span>Update Listing</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
             </form>
         </div>
     </div>
+</div>
+
+<script>
+    // File input name preview
+    const fileInput = document.getElementById('listingImage');
+    const uploadText = document.getElementById('uploadFilename');
+
+    if (fileInput && uploadText) {
+        fileInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                uploadText.innerHTML = '<i class="fa-solid fa-circle-check text-success me-1"></i> New photo selected: <strong>' + this.files[0].name + '</strong>';
+            }
+        });
+    }
+</script>

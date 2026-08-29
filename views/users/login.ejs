@@ -1,33 +1,62 @@
 <% layout('layouts/boilerplate') %>
 
-    <div class="row mt-3">
-        <div class="col-6 offset-3">
-            <div class="glass-card p-4">
-                <h2 class="mb-3">Login</h2>
-                <form action="/login" method="POST" class="needs-validation" novalidate>
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" id="username" name="username" class="form-control" required>
-                    </div>
+<div class="auth-page-wrapper">
+    <!-- Brand Logo in Top Left -->
+    <div class="auth-brand-badge">
+        <i class="fa-solid fa-compass"></i>
+        <span>StayGenoe</span>
+    </div>
 
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" id="password" name="password" class="form-control" required>
-                    </div>
+    <!-- Floating Auth Card -->
+    <div class="auth-card-container">
+        <div class="auth-floating-card">
+            <h2 class="auth-card-title">Member Login</h2>
+            <p class="auth-card-subtitle">Please enter your details</p>
 
-                    <button class="btn btn-primary w-100">Login</button>
-                </form>
+            <form action="/login" method="POST" class="needs-validation" novalidate>
+                <!-- Username -->
+                <div class="mb-3">
+                    <label for="username" class="auth-field-label">Username</label>
+                    <input type="text" id="username" name="username" class="auth-input-control"
+                        placeholder="Enter your username" required autocomplete="username">
+                    <div class="invalid-feedback">Please enter your username.</div>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-2">
+                    <label for="password" class="auth-field-label">Password</label>
+                    <input type="password" id="password" name="password" class="auth-input-control"
+                        placeholder="••••••••••••" required autocomplete="current-password">
+                    <div class="invalid-feedback">Please enter your password.</div>
+                </div>
+
+                <!-- Forgot Password Link -->
+                <a href="javascript:void(0);" onclick="alert('Password reset link has been dispatched to your registered email address.');"
+                    class="auth-forgot-link">
+                    Forgot password?
+                </a>
+
+                <!-- Sign In Button -->
+                <button type="submit" class="btn-auth-dark mb-3">
+                    Sign in
+                </button>
 
                 <!-- Google OAuth -->
                 <div class="d-flex align-items-center my-3">
-                    <hr class="flex-grow-1">
-                    <span class="mx-2 text-muted small">OR</span>
-                    <hr class="flex-grow-1">
+                    <hr class="flex-grow-1 border-secondary opacity-25">
+                    <span class="mx-2 text-muted small">or continue with</span>
+                    <hr class="flex-grow-1 border-secondary opacity-25">
                 </div>
-                <a href="/auth/google" class="btn w-100 d-flex align-items-center justify-content-center gap-2" style="border: 1px solid #dadce0; background: #fff; color: #3c4043; font-weight:500; padding: 10px;">
-                    <img src="https://developers.google.com/identity/images/g-logo.png" width="20" height="20" alt="Google logo">
-                    Continue with Google
+
+                <a href="/auth/google" class="btn-google-auth-pill">
+                    <img src="https://developers.google.com/identity/images/g-logo.png" width="18" height="18" alt="Google logo">
+                    <span>Google Account</span>
                 </a>
-            </div>
+            </form>
+
+            <p class="auth-bottom-text">
+                Are you new? <a href="/signup" class="auth-bottom-link">Create an Account</a>
+            </p>
         </div>
     </div>
+</div>

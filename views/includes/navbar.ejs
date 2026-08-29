@@ -1,45 +1,102 @@
-<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass"></i> StayGenoe</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <!-- Search Bar -->
-            <form class="d-flex mx-auto search-form" role="search" action="/listings" method="GET">
-                <div class="search-container">
-                    <input class="form-control search-input" type="search" name="q" placeholder="Search destinations..."
-                        aria-label="Search" value="<%= typeof query !== 'undefined' ? query : '' %>">
-                    <i class="fas fa-search search-icon"></i>
-                </div>
-            </form>
+<div class="custom-navbar-wrapper">
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container-fluid p-0">
+            <!-- Brand Logo -->
+            <a class="navbar-brand brand-logo" href="/listings">
+                <i class="fa-solid fa-compass"></i>
+                <span>StayGenoe</span>
+            </a>
 
-            <div class="navbar-nav me-auto">
-                <a class="nav-link" href="/listings">Explore</a>
+            <!-- Mobile Right: Theme Toggle + Hamburger -->
+            <div class="d-flex align-items-center gap-2 d-lg-none">
+                <button id="themeToggleMobile" class="theme-toggle-btn" title="Toggle Theme" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#staygenoeNavbar" aria-controls="staygenoeNavbar" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="fa-solid fa-bars-staggered" style="color: var(--primary-color);"></i>
+                </button>
             </div>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/listings/new">Add your home</a>
-                <% if(!currentUser) { %>
-                    <a class="nav-link" href="/signup"><b>Sign up</b><i class="fa-solid fa-user-plus"></i></a>
-                    <a class="nav-link" href="/login"><b>Log in</b><i class="fa-solid fa-hotel"></i></a>
-                    <% } %>
-                        <% if(currentUser) { %>
-                            <a class="nav-link" href="/profile">
-                                <% if (currentUser.image && currentUser.image.url) { %>
-                                    <img src="<%= currentUser.image.url %>" alt="Profile" class="rounded-circle"
-                                        style="width: 25px; height: 25px; object-fit: cover; margin-right: 5px;">
-                                    <% } else { %>
-                                        <b>Profile</b> <i class="fa-solid fa-user"></i>
-                                        <% } %>
-                            </a>
-                            <a class="nav-link" href="/logout"><b>Log out</b><i
-                                    class="fa-solid fa-right-from-bracket"></i></a>
+
+            <!-- Navbar Links (collapsible) -->
+            <div class="collapse navbar-collapse" id="staygenoeNavbar">
+                <!-- Center Nav Links -->
+                <div class="navbar-nav mx-auto nav-links-center my-3 my-lg-0" style="display: flex !important;">
+                    <a class="nav-link nav-link-custom active" href="/listings">Home</a>
+                    <a class="nav-link nav-link-custom" href="/listings#featured">Featured</a>
+                    <a class="nav-link nav-link-custom" href="/listings#destinations">Destinations</a>
+                    <a class="nav-link nav-link-custom" href="/listings/new">Add Home</a>
+                </div>
+
+                <!-- Right Action Buttons (desktop visible) -->
+                <div class="nav-actions d-none d-lg-flex flex-wrap">
+                    <button id="themeToggle" class="theme-toggle-btn" title="Toggle Theme" aria-label="Toggle Theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+
+                    <button class="nav-notify-btn" title="Notifications" aria-label="Notifications">
+                        <i class="fa-solid fa-bell"></i>
+                    </button>
+
+                    <% if(!currentUser) { %>
+                        <a class="nav-pill-btn-outline d-none d-sm-inline-flex" href="/signup">Sign up</a>
+                        <a class="nav-pill-btn" href="/login">
+                            <i class="fa-solid fa-arrow-right-to-bracket me-1"></i> Login
+                        </a>
+                    <% } else { %>
+                        <a class="nav-pill-btn-outline" href="/profile">
+                            <% if (currentUser.image && currentUser.image.url) { %>
+                                <img src="<%= currentUser.image.url %>" alt="Profile" class="rounded-circle me-1"
+                                    style="width: 20px; height: 20px; object-fit: cover;">
+                            <% } else { %>
+                                <i class="fa-solid fa-user me-1"></i>
                             <% } %>
-                                <button id="themeToggle" class="btn btn-sm btn-outline-dark ms-3 rounded-circle"
-                                    style="width: 40px; height: 40px;">
-                                    <i class="fa-solid fa-moon"></i>
-                                </button>
+                            <%= currentUser.username %>
+                        </a>
+                        <a class="nav-pill-btn" href="/logout">
+                            <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                        </a>
+                    <% } %>
+                </div>
+
+                <!-- Mobile Auth Buttons (only inside collapse) -->
+                <div class="d-flex flex-wrap gap-2 pb-3 d-lg-none">
+                    <% if(!currentUser) { %>
+                        <a class="nav-pill-btn-outline" href="/signup" style="display:inline-flex;">Sign up</a>
+                        <a class="nav-pill-btn" href="/login" style="display:inline-flex;">
+                            <i class="fa-solid fa-arrow-right-to-bracket me-1"></i> Login
+                        </a>
+                    <% } else { %>
+                        <a class="nav-pill-btn-outline" href="/profile" style="display:inline-flex;">
+                            <i class="fa-solid fa-user me-1"></i> <%= currentUser.username %>
+                        </a>
+                        <a class="nav-pill-btn" href="/logout" style="display:inline-flex;">
+                            <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                        </a>
+                    <% } %>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</div>
+
+<script>
+    // Sync mobile and desktop theme toggles
+    const themeToggleMobile = document.getElementById('themeToggleMobile');
+    if (themeToggleMobile) {
+        themeToggleMobile.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            const icon = themeToggleMobile.querySelector('i');
+            if (icon) icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            const desktopToggle = document.getElementById('themeToggle');
+            if (desktopToggle) {
+                const desktopIcon = desktopToggle.querySelector('i');
+                if (desktopIcon) desktopIcon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            }
+        });
+    }
+</script>
+

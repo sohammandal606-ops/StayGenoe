@@ -1,13 +1,217 @@
 <% if(success && success.length) { %>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <%= success %>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="sg-flash-toast sg-flash-success" id="sgFlashSuccess" role="alert" aria-live="polite">
+    <div class="sg-flash-icon">
+        <i class="fa-solid fa-circle-check"></i>
     </div>
-    <% } %>
+    <div class="sg-flash-body">
+        <p class="sg-flash-title">Success</p>
+        <p class="sg-flash-msg"><%= success %></p>
+    </div>
+    <button class="sg-flash-close" onclick="dismissFlash('sgFlashSuccess')" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="sg-flash-progress success-progress"></div>
+</div>
+<% } %>
 
-        <% if(error && error.length) { %>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <%= error %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <% } %>
+<% if(error && error.length) { %>
+<div class="sg-flash-toast sg-flash-error" id="sgFlashError" role="alert" aria-live="assertive">
+    <div class="sg-flash-icon">
+        <i class="fa-solid fa-circle-exclamation"></i>
+    </div>
+    <div class="sg-flash-body">
+        <p class="sg-flash-title">Error</p>
+        <p class="sg-flash-msg"><%= error %></p>
+    </div>
+    <button class="sg-flash-close" onclick="dismissFlash('sgFlashError')" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="sg-flash-progress error-progress"></div>
+</div>
+<% } %>
+
+<style>
+/* ==========================================================================
+   STAYGENOE LUXURY FLASH TOAST NOTIFICATIONS
+   ========================================================================== */
+.sg-flash-toast {
+    position: fixed;
+    top: 80px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 320px;
+    max-width: 420px;
+    padding: 1rem 1.25rem 1.25rem 1.25rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid transparent;
+    animation: sgToastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    overflow: hidden;
+}
+
+@keyframes sgToastIn {
+    from { opacity: 0; transform: translateX(60px) scale(0.95); }
+    to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes sgToastOut {
+    from { opacity: 1; transform: translateX(0) scale(1); }
+    to   { opacity: 0; transform: translateX(60px) scale(0.95); }
+}
+
+.sg-flash-success {
+    background: rgba(230, 253, 245, 0.92);
+    border-color: rgba(12, 74, 69, 0.15);
+}
+
+.sg-flash-error {
+    background: rgba(255, 240, 240, 0.92);
+    border-color: rgba(220, 53, 69, 0.18);
+}
+
+body.dark-mode .sg-flash-success {
+    background: rgba(9, 35, 33, 0.92);
+    border-color: rgba(78, 242, 210, 0.2);
+}
+
+body.dark-mode .sg-flash-error {
+    background: rgba(35, 9, 9, 0.92);
+    border-color: rgba(220, 53, 69, 0.25);
+}
+
+.sg-flash-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.sg-flash-success .sg-flash-icon {
+    background: rgba(12, 74, 69, 0.1);
+    color: #0c4a45;
+}
+
+.sg-flash-error .sg-flash-icon {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+body.dark-mode .sg-flash-success .sg-flash-icon {
+    background: rgba(78, 242, 210, 0.15);
+    color: #4ef2d2;
+}
+
+body.dark-mode .sg-flash-error .sg-flash-icon {
+    background: rgba(255, 100, 100, 0.15);
+    color: #ff6b6b;
+}
+
+.sg-flash-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.sg-flash-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0 0 3px 0;
+    letter-spacing: 0.02em;
+}
+
+.sg-flash-success .sg-flash-title { color: #0c4a45; }
+.sg-flash-error .sg-flash-title   { color: #c82333; }
+
+body.dark-mode .sg-flash-success .sg-flash-title { color: #4ef2d2; }
+body.dark-mode .sg-flash-error .sg-flash-title   { color: #ff6b6b; }
+
+.sg-flash-msg {
+    font-size: 0.875rem;
+    margin: 0;
+    line-height: 1.45;
+}
+
+.sg-flash-success .sg-flash-msg { color: #1a4d48; }
+.sg-flash-error .sg-flash-msg   { color: #6b1c24; }
+
+body.dark-mode .sg-flash-success .sg-flash-msg { color: #88ded4; }
+body.dark-mode .sg-flash-error .sg-flash-msg   { color: #e88e8e; }
+
+.sg-flash-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 2px 4px;
+    border-radius: 6px;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    opacity: 0.5;
+}
+
+.sg-flash-success .sg-flash-close { color: #0c4a45; }
+.sg-flash-error .sg-flash-close   { color: #c82333; }
+
+body.dark-mode .sg-flash-close { color: #ffffff; }
+
+.sg-flash-close:hover { opacity: 1; transform: scale(1.1); }
+
+/* Auto-dismiss progress bar at bottom */
+.sg-flash-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    border-radius: 0 0 20px 20px;
+    animation: sgProgressBar 5s linear forwards;
+}
+
+.success-progress { background: linear-gradient(90deg, #0c4a45, #4ef2d2); }
+.error-progress   { background: linear-gradient(90deg, #c82333, #ff6b6b); }
+
+@keyframes sgProgressBar {
+    from { width: 100%; }
+    to   { width: 0%; }
+}
+
+/* Mobile: show at top center on small screens */
+@media (max-width: 576px) {
+    .sg-flash-toast {
+        top: auto;
+        bottom: 90px;
+        right: 12px;
+        left: 12px;
+        min-width: unset;
+        max-width: 100%;
+    }
+}
+</style>
+
+<script>
+function dismissFlash(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.style.animation = 'sgToastOut 0.35s ease forwards';
+        setTimeout(() => el.remove(), 350);
+    }
+}
+
+// Auto-dismiss after 5s
+document.addEventListener('DOMContentLoaded', () => {
+    ['sgFlashSuccess', 'sgFlashError'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) setTimeout(() => dismissFlash(id), 5000);
+    });
+});
+</script>
